@@ -44,7 +44,7 @@ foreach ($data as $result) {
                 $i++;
             }
         }
-        $url = '../optom-sumka.ru/' . $linkimages;
+        $url = '../yourdomain/' . $linkimages;
         $img = $linkimages;
         shell_exec('cp ' . $url . ' ' . $img);
         echo $img . '<br>';
