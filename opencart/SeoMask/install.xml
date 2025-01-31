@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <modification>
+        <name>Seo Mask from Itmades</name>
+		<code>Seo Mask from Itmades</code>
+        <version>1</version>
+        <author>itmades</author>
+		<link></link>
+				<file path="admin/controller/setting/setting.php">
+			<operation>
+                <search><![CDATA[
+				if (isset($this->request->post['config_fax'])) {
+                ]]></search>
+                <add position="before"><![CDATA[
+				/* SEO extension start */
+		if (isset($this->request->post['config_city_im'])) {
+			$data['config_city_im'] = $this->request->post['config_city_im'];
+		} else {
+			$data['config_city_im'] = $this->config->get('config_city_im');
+		}
+
+		if (isset($this->request->post['config_city_pr'])) {
+			$data['config_city_pr'] = $this->request->post['config_city_pr'];
+		} else {
+			$data['config_city_pr'] = $this->config->get('config_city_pr');
+		}
+
+		if (isset($this->request->post['config_productnamemask'])) {
+			$data['config_productnamemask'] = $this->request->post['config_productnamemask'];
+		} else {
+			$data['config_productnamemask'] = $this->config->get('config_productnamemask');
+		}
+
+		if (isset($this->request->post['config_producttitlemask'])) {
+			$data['config_producttitlemask'] = $this->request->post['config_producttitlemask'];
+		} else {
+			$data['config_producttitlemask'] = $this->config->get('config_producttitlemask');
+		}
+
+		if (isset($this->request->post['config_productdescriptionmask'])) {
+			$data['config_productdescriptionmask'] = $this->request->post['config_productdescriptionmask'];
+		} else {
+			$data['config_productdescriptionmask'] = $this->config->get('config_productdescriptionmask');
+		}
+
+		if (isset($this->request->post['config_categorytitlemask'])) {
+			$data['config_categorytitlemask'] = $this->request->post['config_categorytitlemask'];
+		} else {
+			$data['config_categorytitlemask'] = $this->config->get('config_categorytitlemask');
+		}
+
+		if (isset($this->request->post['config_categorydescriptionmask'])) {
+			$data['config_categorydescriptionmask'] = $this->request->post['config_categorydescriptionmask'];
+		} else {
+			$data['config_categorydescriptionmask'] = $this->config->get('config_categorydescriptionmask');
+		}
+		/* SEO extension end */
+                ]]></add>
+            </operation>
+		</file>
+		<file path="admin/view/template/setting/setting.twig">
+			<operation>
+                <search><![CDATA[
+				if (isset($this->request->post['config_fax'])) {
+                ]]></search>
+                <add position="before"><![CDATA[
+				<li><a href="#tab-seo" data-toggle="tab">SEO</a></li>
+                ]]></add>
+            </operation>
+			<operation>
+                <search><![CDATA[
+				<div class="tab-pane" id="tab-server">
+                ]]></search>
+                <add position="before"><![CDATA[
+				            <div class="tab-pane" id="tab-seo">
+              <p>В масках используйте для замены переменные типа { city_im } и т.д.<br />
+                 Перечень переменных<br />
+                 - { city_im } - название города в именительном падеже<br />
+                 - { city_pr } - название города в предложном падеже<br />
+                 - { product_name } - название товара (для страницы товара)<br />
+                 - { product_price } - цена товара (для страницы товара)<br />
+                 - { product_model } - форма выпуска/поле "модель" товара (для страницы товара)<br />
+                 - { category_name } - название категории (для страницы категории)<br />
+              </p>
+			  <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-email">Город в им. падеже</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_city_im" value="{{ config_city_im }}" placeholder="город" id="input-config_city_im" class="form-control" />
+                  {% if error_email %}
+                  <div class="text-danger">{{ error_email }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-email">Город в предлож. падеже</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_city_pr" value="{{ config_city_pr }}" placeholder="в городе" id="input-config_city_pr" class="form-control" />
+                  {% if error_email %}
+                  <div class="text-danger">{{ error_email }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-productnamemask">Маска для наименования товара товара</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_productnamemask" value="{{ config_productnamemask }}" placeholder="" id="input-productnamemask" class="form-control" />
+                </div>
+              </div> 
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-producttitlemask">Маска для title товара</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_producttitlemask" value="{{ config_producttitlemask }}" placeholder="" id="input-producttitlemask" class="form-control" />
+                </div>
+              </div>  
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-productdescriptionmask">Маска для description товара</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_productdescriptionmask" value="{{ config_productdescriptionmask }}" placeholder="" id="input-productdescriptionmask" class="form-control" />
+                </div>
+              </div> 
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-categorytitlemask">Маска для title категории</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_categorytitlemask" value="{{ config_categorytitlemask }}" placeholder="" id="input-categorytitlemask" class="form-control" />
+                </div>
+              </div>  
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-categorydescriptionmask">Маска для description категории</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_categorydescriptionmask" value="{{ config_categorydescriptionmask }}" placeholder="" id="input-categorydescriptionmask" class="form-control" />
+                </div>
+              </div> 
+            </div>
+                ]]></add>
+            </operation>
+		</file>
+		<file path="catalog/controller/product/category.php">
+			<operation>
+                <search><![CDATA[
+				$this->document->setTitle($category_info['meta_title']);
+                ]]></search>
+                <add position="replace"><![CDATA[
+				/* seo extension start */
+$this->load->model('setting/setting');
+
+$settings = [
+    'config_city_im' => $this->model_setting_setting->getSettingValue('config_city_im', $this->config->get('config_store_id')),
+    'config_city_pr' => $this->model_setting_setting->getSettingValue('config_city_pr', $this->config->get('config_store_id')),
+    'config_categorydescriptionmask' => $this->model_setting_setting->getSettingValue('config_categorydescriptionmask', $this->config->get('config_store_id')),
+    'config_categorytitlemask' => $this->model_setting_setting->getSettingValue('config_categorytitlemask', $this->config->get('config_store_id'))
+];
+
+$replacements = [
+    '{ city_im }' => $settings['config_city_im'],
+    '{ city_pr }' => $settings['config_city_pr'],
+    '{ category_name }' => $category_info['name']
+];
+
+$meta_title = $settings['config_categorytitlemask'];
+$meta_title = strtr($meta_title, $replacements);
+
+$this->document->setTitle($meta_title);
+
+                ]]></add>
+            </operation>
+			<operation>
+                <search><![CDATA[
+				$this->document->setDescription($category_info['meta_description']);
+                ]]></search>
+                <add position="replace"><![CDATA[
+$settings = [
+    'config_city_im' => $this->model_setting_setting->getSettingValue('config_city_im', $this->config->get('config_store_id')),
+    'config_city_pr' => $this->model_setting_setting->getSettingValue('config_city_pr', $this->config->get('config_store_id')),
+    'config_categorydescriptionmask' => $this->model_setting_setting->getSettingValue('config_categorydescriptionmask', $this->config->get('config_store_id'))
+];
+
+$replacements = [
+    '{ city_im }' => $settings['config_city_im'],
+    '{ city_pr }' => $settings['config_city_pr'],
+    '{ category_name }' => $category_info['name']
+];
+
+$meta_description = $settings['config_categorydescriptionmask'];
+$meta_description = strtr($meta_description, $replacements);
+
+$this->document->setDescription($meta_description);
+
+			/* seo extension end */
+                ]]></add>
+            </operation>
+		</file>
+		<file path="catalog/controller/product/product.php">
+			<operation>
+                <search><![CDATA[
+				$this->document->setTitle($product_info['meta_title']);
+                ]]></search>
+                <add position="replace"><![CDATA[
+			/* seo extension start */
+$this->load->model('setting/setting');
+$settings = [
+    'config_city_im' => $this->model_setting_setting->getSettingValue('config_city_im', $this->config->get('config_store_id')),
+    'config_city_pr' => $this->model_setting_setting->getSettingValue('config_city_pr', $this->config->get('config_store_id')),
+    'config_productnamemask' => $this->model_setting_setting->getSettingValue('config_productnamemask', $this->config->get('config_store_id')),
+    'config_producttitlemask' => $this->model_setting_setting->getSettingValue('config_producttitlemask', $this->config->get('config_store_id')),
+    'config_productdescriptionmask' => $this->model_setting_setting->getSettingValue('config_productdescriptionmask', $this->config->get('config_store_id')),
+];
+$replacements = [
+    '{ city_im }' => $settings['config_city_im'],
+    '{ city_pr }' => $settings['config_city_pr'],
+    '{ product_name }' => $product_info['name'],
+    '{ product_price }' => $data['price'],
+    '{ product_model }' => $product_info['model']
+];
+$meta_title = $settings['config_producttitlemask'];
+$meta_title = strtr($meta_title, $replacements);
+$this->document->setTitle($meta_title);
+
+                ]]></add>
+            </operation>
+			<operation>
+                <search><![CDATA[
+				$this->document->setDescription($product_info['meta_description']);
+                ]]></search>
+                <add position="replace"><![CDATA[
+$this->load->model('setting/setting');
+
+$settings = [
+    'config_city_im' => $this->model_setting_setting->getSettingValue('config_city_im', $this->config->get('config_store_id')),
+    'config_city_pr' => $this->model_setting_setting->getSettingValue('config_city_pr', $this->config->get('config_store_id')),
+    'config_productnamemask' => $this->model_setting_setting->getSettingValue('config_productnamemask', $this->config->get('config_store_id')),
+    'config_producttitlemask' => $this->model_setting_setting->getSettingValue('config_producttitlemask', $this->config->get('config_store_id')),
+    'config_productdescriptionmask' => $this->model_setting_setting->getSettingValue('config_productdescriptionmask', $this->config->get('config_store_id')),
+];
+
+$replacements = [
+    '{ city_im }' => $settings['config_city_im'],
+    '{ city_pr }' => $settings['config_city_pr'],
+    '{ product_name }' => $product_info['name'],
+    '{ product_price }' => $data['price'],
+    '{ product_model }' => $product_info['model']
+];
+
+$meta_description = $settings['config_productdescriptionmask'];
+$meta_description = strtr($meta_description, $replacements);
+
+$this->document->setDescription($meta_description);
+
+				/* seo extension end */
+                ]]></add>
+            </operation>
+		</file>
+    </modification>
