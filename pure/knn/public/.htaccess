@@ -1,0 +1,37 @@
+php_flag display_startup_errors off
+php_flag display_errors off
+php_flag html_errors off
+php_flag log_errors on
+php_flag ignore_repeated_errors off
+php_flag ignore_repeated_source off
+php_flag report_memleaks on
+php_flag track_errors on
+php_value docref_root 0
+php_value docref_ext 0
+php_value error_log /home/i/itmadetq/dev2.itmades.ru/public/PHP_errors.log
+php_value error_reporting 2047
+php_value log_errors_max_len 0
+
+<Files PHP_errors.log>
+    Require all denied
+</Files>
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+    Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>

@@ -1,0 +1,8 @@
+[31-Jan-2025 06:59:55 Europe/Moscow] PHP Warning:  Unknown: failed to open stream: Permission denied in Unknown on line 0
+[31-Jan-2025 06:59:55 Europe/Moscow] PHP Fatal error:  Unknown: Failed opening required '/home/i/itmadetq/dev2.itmades.ru/public_html/index.php' (include_path='.:/usr/share/php') in Unknown on line 0
+[31-Jan-2025 07:02:52 Europe/Moscow] PHP Warning:  Unknown: failed to open stream: Permission denied in Unknown on line 0
+[31-Jan-2025 07:02:52 Europe/Moscow] PHP Fatal error:  Unknown: Failed opening required '/home/i/itmadetq/dev2.itmades.ru/public_html/index.php' (include_path='.:/usr/share/php') in Unknown on line 0
+[31-Jan-2025 07:05:20 Europe/Moscow] PHP Warning:  Unknown: failed to open stream: Permission denied in Unknown on line 0
+[31-Jan-2025 07:05:20 Europe/Moscow] PHP Fatal error:  Unknown: Failed opening required '/home/i/itmadetq/dev2.itmades.ru/public_html/index.php' (include_path='.:/usr/share/php') in Unknown on line 0
+[31-Jan-2025 07:08:55 Europe/Moscow] PHP Warning:  Unknown: failed to open stream: Permission denied in Unknown on line 0
+[31-Jan-2025 07:08:55 Europe/Moscow] PHP Fatal error:  Unknown: Failed opening required '/home/i/itmadetq/dev2.itmades.ru/public_html/index.php' (include_path='.:/usr/share/php') in Unknown on line 0
