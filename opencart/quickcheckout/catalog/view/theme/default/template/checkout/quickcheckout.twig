@@ -1,0 +1,298 @@
+{{ header }}
+<div class="container" id="checkout">
+<ul class="breadcrumb">
+
+    <li><a href="/">Главная</a></li>
+    <li>Оформление заказа</li>
+  </ul>
+  {% if error_warning %}
+  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+  {% endif %}
+   <div id="content">
+   <h1>Оформление заказа</h1>
+	{% if checkProdutcs %}
+	<div class="row">
+		<div class="col_2_plus">
+			<form id="buy_form">
+
+				<fieldset id="account" class=col-md-6>
+					<legend class="fm-content-title">Получатель</legend>
+					<div class="form-group">
+						<input type="text" required="required" name="firstname" value="{{ firstname }}" placeholder="ФИО*"
+							id="firstname" class="form-control" />
+					</div>
+					<div class="form-group">
+						<input type="text" required="required" name="email" value="{{ email }}" placeholder="Email*"
+							   id="email" class="form-control" />
+					</div>
+					<div class="form-group">
+						<input type="text" required="required" name="telephone" value="{{ telephone }}" placeholder="Телефон*"
+							id="input-payment-telephone" class="form-control" />
+					</div>
+					<legend class="fm-content-title">Адрес доставки</legend>
+					{% if addresses %}
+					<div class="form-group" id="shipping-existing">
+						<select id="existing_address" class="form-control">
+							<option value="" selected>Выберите адресс</option>
+							{% for address in addresses %}
+								<option class="address-exist-thumb"
+										data-city="{{ address.city }}"
+										data-postcode="{{ address.postcode }}"
+										data-street="{{ address.address_1 }}"
+										data-building="{{ address.building }}"
+										data-entrance="{{ address.entrance }}"
+										data-appartment="{{ address.appartment }}">
+									{{ address.address }}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+					{% endif %}
+					<div class="form-group">
+						<input type="text" name="city" value="{{ city }}" placeholder="Город"
+							id="city" class="form-control" />
+					</div>
+					<div class="form-group">
+						<input class="form-control" required="required" type="text" name="postcode" id="postcode" value="{{ postcode }}" placeholder="Индекс">
+					</div>
+					<div class="form-group">
+						<input type="text" required="required" name="street" value="{{ street }}" placeholder="Улица"
+							id="street" class="form-control" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="building" value="{{ building }}" placeholder="Дом"
+							   id="building" class="form-control" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="entrance" value="{{ entrance }}" placeholder="Подъезд"
+							   id="entrance" class="form-control" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="appartment" value="{{ appartment }}" placeholder="Квартира/офис"
+							   id="appartment" class="form-control" />
+					</div>
+				</fieldset>
+				<fieldset id="shipping_method" class="col-md-6">
+					{% if payment_methods %}
+						<legend>Способ оплаты</legend>
+						{% for payment_method in payment_methods %}
+							<div class="radio">
+								<label>{% if payment_method.dummy is empty and (payment_method.code == code or not code) %}
+										{% set code = payment_method.code %}
+										<input type="radio" name="payment_method" value="{{ payment_method.code }}" {{ payment_method.dummy is not empty ? 'disabled="disabled"' : '' }} checked="checked" />
+									{% else %}
+										<input type="radio" name="payment_method" value="{{ payment_method.code }}" {{ payment_method.dummy is not empty ? 'disabled="disabled"' : '' }} />
+									{% endif %}
+
+									{% if payment_method.image is not empty %}
+										<img src="{{ payment_method.image }}" {{ payment_method.image_style is not empty ? 'style="' ~ payment_method.image_style ~ '"' : '' }}>
+									{% endif %}
+									{{ payment_method.title }}
+									{% if payment_method.terms %}
+										({{ payment_method.terms }})
+									{% endif %} </label>
+							</div>
+
+							{% if payment_method.description is not empty %}
+								<div>
+									<label for="{{ payment_method.code }}">
+										{{ payment_method.description }}
+									</label>
+								</div>
+							{% endif %}
+
+						{% endfor %}
+					{% endif %}
+					{% if shipping_methods %}
+						<legend>Способ доставки</legend>
+						{% for shipping_method in shipping_methods %}
+							<p><strong>{{ shipping_method.title }}</strong></p>
+							{% if not shipping_method.error %}
+								{% for quote in shipping_method.quote %}
+									<div class="radio">
+										<label> {% if quote.dummy is empty and (quote.code == code or not code) %}
+												{% set code = quote.code %}
+												<input type="radio" name="shipping_method" value="{{ quote.code }}" {{ quote.dummy is not empty ? 'disabled="disabled"' : '' }} checked="checked" />
+											{% else %}
+												<input type="radio" name="shipping_method" value="{{ quote.code }}" {{ quote.dummy is not empty ? 'disabled="disabled"' : '' }} />
+											{% endif %}
+
+											{% if quote.image is not empty %}
+												<img src="{{ quote.image }}" {{ quote.image_style is not empty ? 'style="' ~ quote.image_style ~ '"' : '' }}>
+											{% endif %}
+											{{ quote.title }} - {{ quote.text }}</label>
+									</div>
+
+									{% if quote.description is not empty %}
+										<div>
+											<label for="{{ quote.code }}">
+												{{ quote.description }}
+											</label>
+										</div>
+									{% endif %}
+
+								{% endfor %}
+							{% else %}
+								<div class="alert alert-danger alert-dismissible">{{ shipping_method.error }}</div>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+						<legend class="fm-content-title">Комментарий к заказу</legend>
+						<p>
+							<textarea name="comment" rows="8" class="form-control">{{ comment }}</textarea>
+						</p>
+				</fieldset>
+				<input type="submit" id="form_submit" style="display:none;" />
+				<!-- payment methods -->
+
+
+			</form>
+		</div>
+		</div>
+		<div class="row">
+		<div class="col_2_minus">
+			<div id="product_sum">
+				<div id="products_table">
+				</div>
+				<table>
+					{% for total in totals %}
+					{% if loop.last %}
+					<tr>
+						<td class="text-left sum_text">{{ total.title }}:</td>
+						<td class="text-right sum_num">{{ total.text }}</td>
+					</tr>
+					{% endif %}
+					{% endfor %}
+				</table>
+				<div id="checkout_buttons">
+					<a class="black_btn btn btn-primary btn-lg btn-block" href="/index.php?route=checkout/cart" id="edit_cart_button">Редактировать корзину!</a>
+					<button id="button-order" class="black_btn btn btn-primary btn-lg btn-block" disabled>{{ button_checkout }}</button>
+				</div>
+
+			</div>
+		</div>
+		{% else %}
+		<div class="row">
+			<div class="col-md-12">
+				<p style="font-size:18px;">Ваша корзина пуста</p>
+				<div class="pull-right">
+					<a href="/" class="btn btn-primary">Вернуться к выбору товара</a>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+</div>
+<script type="text/javascript">
+	$('#button-order').click(function () {
+		$('#form_submit').click();
+	});
+	$('#buy_form').submit(function (evt) {
+		evt.preventDefault(); if ($('input[name=telephone]').val().length) {
+			$.ajax({ url: 'index.php?route=checkout/quickcheckout/addOrder', type: 'post', dataType: 'json', data: $("#buy_form").serialize(), success: function (json) { window.location.replace("/index.php?route=checkout/success"); } });
+		} else { $('input[name=telephone]').css('border', '1px solid red !important'); }
+	}); </script>
+<script>
+	$('#existing_address').change(function () {
+		var selectedOption = $(this).find('option:selected');
+		$('#city').val(selectedOption.data('city'));
+		$('#postcode').val(selectedOption.data('postcode'));
+		$('#street').val(selectedOption.data('street'));
+		$('#building').val(selectedOption.data('building'));
+		$('#entrance').val(selectedOption.data('entrance'));
+		$('#appartment').val(selectedOption.data('appartment'));
+	});
+</script>
+
+<script>
+	// Функция для получения данных и создания таблицы
+	function loadCart() {
+		fetch('/index.php?route=checkout/quickcart')
+				.then(response => response.json())
+				.then(data => {
+					const productsTable = document.getElementById('products_table');
+					productsTable.innerHTML = '';
+
+					if (data.products && data.products.length > 0) {
+						const totalSum = data.products.reduce((sum, product) =>
+								sum + (product.price * product.quantity), 0
+						);
+
+						const tableHTML = `
+                    <div class="table-responsive">
+                        <table class="simplecheckout-cart">
+                            <colgroup>
+                                <col class="image">
+                                <col class="name">
+                                <col class="model">
+                                <col class="quantity">
+                                <col class="price">
+                                <col class="total">
+                                <col class="remove">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="image">Фото</th>
+                                    <th class="name">Наименование товара</th>
+                                    <th class="model">Модель</th>
+                                    <th class="quantity"><span title="Количество">Кол-во</span></th>
+                                    <th class="price">Цена</th>
+                                    <th class="total">Итого</th>
+                                    <th class="remove"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.products.map(product => `
+                                    <tr>
+                                        <td class="image">
+                                            <a href="${product.href}"><img src="${product.thumb}" alt="${product.name}" title="${product.name}"></a>
+                                        </td>
+                                        <td class="name">
+                                            <a href="${product.href}">${product.name}</a>
+                                            <div class="options"></div>
+                                        </td>
+                                        <td class="model">${product.model}</td>
+                                        <td class="quantity">
+                                            <div class="input-group btn-block" style="max-width: 200px;">
+                                                ${product.quantity}
+                                            </div>
+                                        </td>
+                                        <td class="price">${product.price}р.</td>
+                                        <td class="total">${(product.price * product.quantity).toFixed(2)}р.</td>
+                                        <td class="remove"></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" style="text-align: right; font-weight: bold;">Итого:</td>
+                                    <td class="total" style="font-weight: bold;">${totalSum.toFixed(2)}р.</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                `;
+
+						productsTable.innerHTML = tableHTML;
+						if ((totalSum < data.minimal_total) && (data.minimal_total > 0)) {
+							let errorHtml = `<div class="alert alert-danger simplecheckout-warning-block">Внимание: Минимальная сумма для заказа <b>${data.minimal_total}р.</b>!</div>`;
+							$('#checkout').prepend(errorHtml);
+						} else {
+							$('#button-order').removeAttr('disabled');
+						}
+
+					} else {
+						productsTable.innerHTML = '<p>Ваша корзина пуста.</p>';
+					}
+				})
+				.catch(error => console.error('Ошибка:', error));
+	}
+
+	document.addEventListener('DOMContentLoaded', loadCart);
+</script>
+<link href="catalog/view/theme/default/stylesheet/simple.css?v=4.11.9" rel="stylesheet" type="text/css" media="all" onload="this.media='all'">
+{{ footer }}
